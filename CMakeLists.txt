@@ -12,3 +12,6 @@ add_custom_command(
     TARGET Pong
     POST_BUILD
     COMMAND "cp" ARGS -rp ${CMAKE_SOURCE_DIR}/assets ${CMAKE_BINARY_DIR})
+install(TARGETS Pong RUNTIME DESTINATION .)
+install(DIRECTORY assets DESTINATION .)
+include (CPack)
