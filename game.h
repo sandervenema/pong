@@ -33,7 +33,7 @@ struct Game
 
 int game_init(struct Game *game);
 int game_create_window(struct Game *game, char *title, int width, int height, bool fullscreen);
-void game_create_objects(struct Game *game);
+int game_create_objects(struct Game *game);
 void game_destroy_objects(struct Game *game);
 void game_handle_events(struct Game *game);
 void game_update(struct Game *game);

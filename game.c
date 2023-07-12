@@ -44,7 +44,7 @@ int game_create_window(struct Game *game, char *title, int width, int height, bo
     return 0;
 }
 
-void game_create_objects(struct Game *game)
+int game_create_objects(struct Game *game)
 {    
     struct Resource {
         char *url;
@@ -61,10 +61,16 @@ void game_create_objects(struct Game *game)
     for (int i = 0; i < NUM_OBJECTS; i++)
     {
         game->objects[i] = object_create(resources[i].url, game->renderer);
-        if (game->objects[i] == NULL) continue;
+        if (game->objects[i] == NULL)
+        {
+            printf("ERROR: asset missing: %s\n", resources[i].url);
+            game_set_is_running(game, false);
+            return -1;
+        }
         game->objects[i]->dest_rect.x = resources[i].xpos;
         game->objects[i]->dest_rect.y = resources[i].ypos - (game->objects[i]->dest_rect.h/2);
     }
+    return 0;
 }
 
 void game_destroy_objects(struct Game *game)

@@ -9,7 +9,11 @@ int main(void)
     struct Game game = {0};
     game_init(&game);
     game_create_window(&game, "Pong", WINDOW_WIDTH, WINDOW_HEIGHT, false);
-    game_create_objects(&game);
+    if (game_create_objects(&game) == -1)
+    {
+        game_clean(&game);
+        return -1;
+    }
     game_new_round(&game);
 
     while (game_is_running(&game))
