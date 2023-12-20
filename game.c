@@ -16,6 +16,13 @@ int game_init(struct Game *game)
         return 3;
     }
 
+    if (TTF_Init() < 0) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                "Couldn't initialize SDL TTF: %s\n",
+                SDL_GetError());
+        return 4;
+    }
+
     game->is_running = true;
     game->ball_velocity_x = BALL_SPEED;
     game->ball_velocity_y = BALL_SPEED;
@@ -191,6 +198,7 @@ void game_clean(struct Game *game)
 {
     game_destroy_objects(game);
     SDL_DestroyRenderer(game->renderer);
+    TTF_Quit();
     SDL_DestroyWindow(game->window);
     SDL_Quit();
 }
@@ -211,4 +219,16 @@ bool game_is_running(struct Game *game)
 void game_set_is_running(struct Game *game, bool is_running)
 {
     game->is_running = is_running;
+}
+
+int game_set_font(struct Game *game)
+{
+    game->font = TTF_OpenFont("assets/vinasans.ttf", FONT_PTSIZE);
+    if (game->font == NULL) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                "could not open font: %s\n",
+                SDL_GetError());
+        return -1;
+    }
+    return 0;
 }

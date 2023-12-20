@@ -5,9 +5,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -Wextra -Werror -Wpedantic")
 include(FindPkgConfig)
 pkg_search_module(SDL2 REQUIRED sdl2)
 pkg_search_module(SDL2IMAGE REQUIRED SDL2_image)
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
+pkg_search_module(SDL2TTF REQUIRED SDL2_ttf)
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS})
 add_executable(Pong ${SOURCES})
-target_link_libraries(Pong ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} "m")
+target_link_libraries(Pong ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2TTF_LIBRARIES} "m")
 add_custom_command(
     TARGET Pong
     POST_BUILD

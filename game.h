@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_ttf.h"
 
 #include "object.h"
 
@@ -14,6 +15,8 @@
 
 #define BALL_SPEED 10
 #define PADDLE_SPEED 10
+
+#define FONT_PTSIZE 20
 
 struct Game
 {
@@ -27,6 +30,7 @@ struct Game
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Event event;
+    TTF_Font *font;
     
     bool is_running;
 };
@@ -42,5 +46,6 @@ void game_clean(struct Game *game);
 void game_new_round(struct Game *game);
 bool game_is_running(struct Game *game);
 void game_set_is_running(struct Game *game, bool is_running);
+int game_set_font(struct Game *game);
 
 #endif /* GAME_H */
