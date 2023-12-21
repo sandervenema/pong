@@ -7,6 +7,7 @@
 #include "SDL2/SDL_ttf.h"
 
 #include "object.h"
+#include "fonts.h"
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
@@ -16,8 +17,6 @@
 #define BALL_SPEED 10
 #define PADDLE_SPEED 10
 
-#define FONT_PTSIZE 20
-
 struct Game
 {
     struct Object *objects[NUM_OBJECTS];
@@ -26,12 +25,13 @@ struct Game
     float ball_angle;
     int player1_score;
     int player2_score;
+    struct Message *score;
+    char *score_str;
 
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Event event;
-    TTF_Font *font;
-    
+
     bool is_running;
 };
 
@@ -43,9 +43,8 @@ void game_handle_events(struct Game *game);
 void game_update(struct Game *game);
 void game_render(struct Game *game);
 void game_clean(struct Game *game);
-void game_new_round(struct Game *game);
+void game_new_round(struct Game *game, bool restart);
 bool game_is_running(struct Game *game);
 void game_set_is_running(struct Game *game, bool is_running);
-int game_set_font(struct Game *game);
 
 #endif /* GAME_H */

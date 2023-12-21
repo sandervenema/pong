@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 project(Pong)
-set(SOURCES main.c game.h game.c object.h object.c util.h util.c)
+set(SOURCES main.c game.h game.c object.h object.c util.h util.c fonts.h fonts.c)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -Wextra -Werror -Wpedantic")
 include(FindPkgConfig)
 pkg_search_module(SDL2 REQUIRED sdl2)

@@ -3,6 +3,7 @@
 
 #include "game.h"
 #include "util.h"
+#include "fonts.h"
 
 # define M_PI 3.14159265358979323846
 
@@ -26,6 +27,10 @@ int game_init(struct Game *game)
     game->is_running = true;
     game->ball_velocity_x = BALL_SPEED;
     game->ball_velocity_y = BALL_SPEED;
+    game->score = fonts_message_create();
+    game->score_str = malloc(sizeof(char *));
+;
+    fonts_set_position(game->score, WINDOW_WIDTH / 2, 10);
 
     srand(time(NULL));
     return 0;
@@ -47,6 +52,7 @@ int game_create_window(struct Game *game, char *title, int width, int height, bo
                 SDL_GetError());
         return 3;
     }
+    fonts_set_message(game->renderer, game->score, "0 | 0");
     SDL_SetWindowTitle(game->window, title);
     return 0;
 }
@@ -139,7 +145,7 @@ void game_handle_events(struct Game *game)
 
     if (keystates[SDL_SCANCODE_R])
     {
-        game_new_round(game);
+        game_new_round(game, true);
     }
 }
 
@@ -155,16 +161,20 @@ void game_update(struct Game *game)
     if (ball_pos->x < 0)
     {
         game->player2_score++;
-        printf("scores: p1=%d p2=%d\n", game->player1_score, game->player2_score);
-        game_new_round(game);
+        // update scores message
+        sprintf(game->score_str, "%d | %d", game->player1_score, game->player2_score);
+        fonts_set_message(game->renderer, game->score, game->score_str);
+        game_new_round(game, false);
     }
 
     // right edge
     if (ball_pos->x > WINDOW_WIDTH - ball_pos->w)
     {
         game->player1_score++;
-        printf("scores: p1=%d p2=%d\n", game->player1_score, game->player2_score);
-        game_new_round(game);
+        // update scores message
+        sprintf(game->score_str, "%d | %d", game->player1_score, game->player2_score);
+        fonts_set_message(game->renderer, game->score, game->score_str);
+        game_new_round(game, false);
     }
 
     // upper edge or lower edge: bounce ball back in opposite direction
@@ -185,26 +195,38 @@ void game_update(struct Game *game)
 void game_render(struct Game *game)
 {
     SDL_RenderClear(game->renderer);
+    SDL_SetRenderDrawColor(game->renderer, 0x00, 0x00, 0x00, 0xff);
+    SDL_RenderFillRect(game->renderer, NULL);
 
     for (int i = 0; i < NUM_OBJECTS; i++)
     {
         SDL_RenderCopy(game->renderer, game->objects[i]->texture, NULL, &game->objects[i]->dest_rect);
     }
 
+    fonts_render(game->renderer, game->score);
+
     SDL_RenderPresent(game->renderer);
 }
 
 void game_clean(struct Game *game)
 {
+    free(game->score_str);
     game_destroy_objects(game);
+    fonts_message_destroy(game->score);
     SDL_DestroyRenderer(game->renderer);
     TTF_Quit();
     SDL_DestroyWindow(game->window);
     SDL_Quit();
 }
 
-void game_new_round(struct Game *game)
+void game_new_round(struct Game *game, bool restart)
 {
+    if (restart)
+    {
+        fonts_set_message(game->renderer, game->score, "0 | 0");
+        game->player1_score = 0;
+        game->player2_score = 0;
+    }
     game->ball_angle = random_between(0, 2*M_PI);
     SDL_Rect *ball_pos = &game->objects[0]->dest_rect;
     ball_pos->x = WINDOW_WIDTH/2;
@@ -219,16 +241,4 @@ bool game_is_running(struct Game *game)
 void game_set_is_running(struct Game *game, bool is_running)
 {
     game->is_running = is_running;
-}
-
-int game_set_font(struct Game *game)
-{
-    game->font = TTF_OpenFont("assets/vinasans.ttf", FONT_PTSIZE);
-    if (game->font == NULL) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                "could not open font: %s\n",
-                SDL_GetError());
-        return -1;
-    }
-    return 0;
 }
