@@ -14,6 +14,7 @@ struct Message *fonts_message_create(void)
 
 void fonts_message_destroy(struct Message *message)
 {
+    TTF_CloseFont(message->font);
     free(message);
 }
 
