@@ -40,6 +40,7 @@ int game_create_window(struct Game *game, char *title, int width, int height, bo
 int game_create_objects(struct Game *game);
 void game_destroy_objects(struct Game *game);
 void game_handle_events(struct Game *game);
+void game_update_score(struct Game *game);
 void game_update(struct Game *game);
 void game_render(struct Game *game);
 void game_clean(struct Game *game);

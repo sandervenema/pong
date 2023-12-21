@@ -149,6 +149,12 @@ void game_handle_events(struct Game *game)
     }
 }
 
+void game_update_score(struct Game *game)
+{
+    sprintf(game->score_str, "%d | %d", game->player1_score, game->player2_score);
+    fonts_set_message(game->renderer, game->score, game->score_str);
+}
+
 void game_update(struct Game *game)
 {
     SDL_Rect *ball_pos = &game->objects[0]->dest_rect;
@@ -161,9 +167,7 @@ void game_update(struct Game *game)
     if (ball_pos->x < 0)
     {
         game->player2_score++;
-        // update scores message
-        sprintf(game->score_str, "%d | %d", game->player1_score, game->player2_score);
-        fonts_set_message(game->renderer, game->score, game->score_str);
+        game_update_score(game);
         game_new_round(game, false);
     }
 
@@ -171,9 +175,7 @@ void game_update(struct Game *game)
     if (ball_pos->x > WINDOW_WIDTH - ball_pos->w)
     {
         game->player1_score++;
-        // update scores message
-        sprintf(game->score_str, "%d | %d", game->player1_score, game->player2_score);
-        fonts_set_message(game->renderer, game->score, game->score_str);
+        game_update_score(game);
         game_new_round(game, false);
     }
 
