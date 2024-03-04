@@ -17,7 +17,8 @@ int game_init(struct Game *game)
         return 3;
     }
 
-    if (TTF_Init() < 0) {
+    if (TTF_Init() < 0)
+    {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
                 "Couldn't initialize SDL TTF: %s\n",
                 SDL_GetError());
@@ -29,7 +30,6 @@ int game_init(struct Game *game)
     game->ball_velocity_y = BALL_SPEED;
     game->score = fonts_message_create();
     game->score_str = malloc(sizeof(char *));
-;
     fonts_set_position(game->score, WINDOW_WIDTH / 2, 10);
 
     srand(time(NULL));
