@@ -23,11 +23,18 @@ and then you can simply start it with the following command:
 ./Pong
 ```
 
+You can also start it in full-screen, as follows:
+
+```bash
+./Pong -f
+```
+
 ## Controls
 
 * `UP` and `DOWN` arrows move the brick for player 1;
 * `W` and `S` moves the brick for player 2;
-* `R` resets the game.
+* `R` resets the game;
+* `F` toggles full-screen rendering.
 
 ## Dependencies
 
