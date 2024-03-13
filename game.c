@@ -57,6 +57,12 @@ int game_create_window(struct Game *game, char *title, int width, int height, bo
     return 0;
 }
 
+int game_toggle_window_fullscreen(struct Game *game)
+{
+    bool is_fullscreen = SDL_GetWindowFlags(game->window) & SDL_WINDOW_FULLSCREEN;
+    return SDL_SetWindowFullscreen(game->window, !is_fullscreen);
+}
+
 int game_create_objects(struct Game *game)
 {    
     struct Resource {
@@ -151,6 +157,11 @@ void game_handle_events(struct Game *game)
     if (keystates[SDL_SCANCODE_Q])
     {
         game_set_is_running(game, false);
+    }
+
+    if (keystates[SDL_SCANCODE_F])
+    {
+        game_toggle_window_fullscreen(game);
     }
 }
 
