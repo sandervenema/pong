@@ -1,14 +1,34 @@
+#include <getopt.h>
 #include "game.h"
 
-int main(void)
+int main(int argc, char *argv[])
 {
     const int fps = 60;
     const Uint32 time_per_frame_ms = 1000 / fps;
     Uint32 start_time, end_time, delta;
 
+    bool fullscreen = false;
+    if (argc > 1)
+    {
+        char c;
+        while ((c = getopt(argc, argv, "f")) != -1)
+        {
+            switch (c)
+            {
+            case 'f':
+                fullscreen = true;
+                break;
+            default:
+                fprintf(stderr, "Usage: %s [-f]\n\n", argv[0]);
+                fprintf(stderr, "\t-f\trender window in full screen\n");
+                return -1;
+            }
+        }
+    }
+
     struct Game game = {0};
     game_init(&game);
-    game_create_window(&game, "Pong", WINDOW_WIDTH, WINDOW_HEIGHT, false);
+    game_create_window(&game, "Pong", WINDOW_WIDTH, WINDOW_HEIGHT, fullscreen);
     if (game_create_objects(&game) == -1)
     {
         game_clean(&game);
