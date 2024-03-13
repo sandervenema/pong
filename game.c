@@ -147,6 +147,11 @@ void game_handle_events(struct Game *game)
     {
         game_new_round(game, true);
     }
+
+    if (keystates[SDL_SCANCODE_Q])
+    {
+        game_set_is_running(game, false);
+    }
 }
 
 void game_update_score(struct Game *game)
